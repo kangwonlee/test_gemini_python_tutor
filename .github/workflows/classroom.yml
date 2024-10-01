@@ -1,0 +1,119 @@
+name: Autograding Tests
+'on':
+  - push
+  - workflow_dispatch
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+
+    - name: Update pip
+      run: python -m pip install --upgrade pip
+
+    - name: Create and Activate Virtual Environment
+      run: |
+        python -m venv test-env
+        source test-env/bin/activate
+        echo $VIRTUAL_ENV
+
+    - name: Get pip cache dir
+      id: pip-cache
+      run: |
+        source test-env/bin/activate
+        echo $VIRTUAL_ENV
+        echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
+
+    - name: pip cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.pip-cache.outputs.dir }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+
+    - name: Setup test environment
+      id: setup-env
+      run: |
+        source test-env/bin/activate
+        echo $VIRTUAL_ENV
+        pip install -r requirements.txt
+
+    - name: Set report file names
+      id: json
+      run: |
+        echo "syntax=report_syntax.json" >> $GITHUB_OUTPUT
+        echo "style=report_style.json" >> $GITHUB_OUTPUT
+        echo "results=report_results.json" >> $GITHUB_OUTPUT
+
+    - name: check syntax
+      id: check-syntax
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: check syntax
+        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.syntax }} tests/test_syntax.py"
+        timeout: 1
+        max-score: 2
+
+    - name: check style
+      id: check-style
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: check style
+        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.style }} tests/test_style.py"
+        timeout: 1
+        max-score: 1
+  
+    - name: test results
+      id: test-results
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: test results
+        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
+        command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-file=${{ steps.json.outputs.results }} tests/test_results.py"
+        timeout: 2
+        max-score: 2
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        CHECK-SYNTAX_RESULTS: "${{steps.check-syntax.outputs.result}}"
+        CHECK-STYLE_RESULTS: "${{steps.check-style.outputs.result}}"
+        TEST-RESULTS_RESULTS: "${{steps.test-results.outputs.result}}"
+      with:
+        runners: check-syntax,check-style,test-results
+
+    - name: AI Tutor
+      id: ai_tutor
+      if: always()
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        SYNTAX_REPORT: ${{ steps.json.outputs.syntax }}
+        RESULTS_REPORT: ${{ steps.json.outputs.results }}
+      run: . test-env/bin/activate && echo $VIRTUAL_ENV && python -m pytest ./ai_tutor/ai_tutor.py
+      timeout-minutes: 5
+
+    - name: upload artifacts
+      id: artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: plots
+        path: |
+          ./*.png
+          ./*.json
+        retention-days: 21
+        overwrite: true
