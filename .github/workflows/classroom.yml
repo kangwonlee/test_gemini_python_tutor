@@ -97,7 +97,7 @@ jobs:
         runners: check-syntax,check-style,test-results
 
     - name: AI Tutor
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@main
       id: ai_tutor
       if: always()
       with:
