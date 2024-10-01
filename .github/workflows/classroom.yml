@@ -97,13 +97,15 @@ jobs:
         runners: check-syntax,check-style,test-results
 
     - name: AI Tutor
+      uses: kangwonlee/gemini-python-tutor@dev
       id: ai_tutor
       if: always()
+      with:
+        report-files: ${{ steps.json.outputs.syntax }},${{ steps.json.outputs.style }},${{ steps.json.outputs.results }}
+        student-files: exercise.py
+        readme-path: README.md
       env:
         GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-        SYNTAX_REPORT: ${{ steps.json.outputs.syntax }}
-        RESULTS_REPORT: ${{ steps.json.outputs.results }}
-      run: . test-env/bin/activate && echo $VIRTUAL_ENV && python -m pytest ./ai_tutor/ai_tutor.py
       timeout-minutes: 5
 
     - name: upload artifacts
