@@ -144,6 +144,18 @@ jobs:
         explanation-in: Chinese
       timeout-minutes: 5
 
+    - name: AI Tutor Spanish
+      uses: kangwonlee/gemini-python-tutor@dev
+      id: ai_tutor-spanish
+      if: always()
+      with:
+        report-files: ${{ steps.json.outputs.syntax }},${{ steps.json.outputs.style }},${{ steps.json.outputs.results }}
+        student-files: exercise.py
+        readme-path: README.md
+        api-key: ${{ secrets.GOOGLE_API_KEY }}
+        explanation-in: Spanish
+      timeout-minutes: 5
+
     - name: AI Tutor French
       uses: kangwonlee/gemini-python-tutor@dev
       id: ai_tutor-french
@@ -154,6 +166,30 @@ jobs:
         readme-path: README.md
         api-key: ${{ secrets.GOOGLE_API_KEY }}
         explanation-in: French
+      timeout-minutes: 5
+
+    - name: AI Tutor German
+      uses: kangwonlee/gemini-python-tutor@dev
+      id: ai_tutor-german
+      if: always()
+      with:
+        report-files: ${{ steps.json.outputs.syntax }},${{ steps.json.outputs.style }},${{ steps.json.outputs.results }}
+        student-files: exercise.py
+        readme-path: README.md
+        api-key: ${{ secrets.GOOGLE_API_KEY }}
+        explanation-in: German
+      timeout-minutes: 5
+
+    - name: AI Tutor Thai
+      uses: kangwonlee/gemini-python-tutor@dev
+      id: ai_tutor-thai
+      if: always()
+      with:
+        report-files: ${{ steps.json.outputs.syntax }},${{ steps.json.outputs.style }},${{ steps.json.outputs.results }}
+        student-files: exercise.py
+        readme-path: README.md
+        api-key: ${{ secrets.GOOGLE_API_KEY }}
+        explanation-in: Thai
       timeout-minutes: 5
 
     - name: upload artifacts
