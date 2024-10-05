@@ -180,6 +180,18 @@ jobs:
         explanation-in: German
       timeout-minutes: 5
 
+    - name: AI Tutor Italian
+      uses: kangwonlee/gemini-python-tutor@dev
+      id: ai_tutor-italian
+      if: always()
+      with:
+        report-files: ${{ steps.json.outputs.syntax }},${{ steps.json.outputs.style }},${{ steps.json.outputs.results }}
+        student-files: exercise.py
+        readme-path: README.md
+        api-key: ${{ secrets.GOOGLE_API_KEY }}
+        explanation-in: Italian
+      timeout-minutes: 5
+
     - name: AI Tutor Thai
       uses: kangwonlee/gemini-python-tutor@dev
       id: ai_tutor-thai
