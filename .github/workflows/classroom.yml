@@ -97,7 +97,7 @@ jobs:
         runners: check-syntax,check-style,test-results
 
     - name: AI Tutor English
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@develop
       id: ai_tutor-korean
       if: always()
       with:
@@ -109,7 +109,7 @@ jobs:
       timeout-minutes: 5
 
     - name: AI Tutor Korean
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@develop
       id: ai_tutor
       if: always()
       with:
@@ -121,7 +121,7 @@ jobs:
       timeout-minutes: 5
 
     - name: AI Tutor Japanese
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@develop
       id: ai_tutor-japanese
       if: always()
       with:
@@ -133,7 +133,7 @@ jobs:
       timeout-minutes: 5
 
     - name: AI Tutor Chinese
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@develop
       id: ai_tutor-chinese
       if: always()
       with:
@@ -145,7 +145,7 @@ jobs:
       timeout-minutes: 5
 
     - name: AI Tutor Spanish
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@develop
       id: ai_tutor-spanish
       if: always()
       with:
@@ -157,7 +157,7 @@ jobs:
       timeout-minutes: 5
 
     - name: AI Tutor French
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@develop
       id: ai_tutor-french
       if: always()
       with:
@@ -169,7 +169,7 @@ jobs:
       timeout-minutes: 5
 
     - name: AI Tutor German
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@develop
       id: ai_tutor-german
       if: always()
       with:
@@ -181,7 +181,7 @@ jobs:
       timeout-minutes: 5
 
     - name: AI Tutor Italian
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@develop
       id: ai_tutor-italian
       if: always()
       with:
@@ -193,7 +193,7 @@ jobs:
       timeout-minutes: 5
 
     - name: AI Tutor Thai
-      uses: kangwonlee/gemini-python-tutor@dev
+      uses: kangwonlee/gemini-python-tutor@develop
       id: ai_tutor-thai
       if: always()
       with:
