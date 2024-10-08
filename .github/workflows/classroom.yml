@@ -204,6 +204,42 @@ jobs:
         explanation-in: Thai
       timeout-minutes: 5
 
+    - name: AI Tutor Bahasa Indonesia
+      uses: kangwonlee/gemini-python-tutor@develop
+      id: ai_tutor-bahasa-indonesian
+      if: always()
+      with:
+        report-files: ${{ steps.json.outputs.syntax }},${{ steps.json.outputs.style }},${{ steps.json.outputs.results }}
+        student-files: exercise.py
+        readme-path: README.md
+        api-key: ${{ secrets.GOOGLE_API_KEY }}
+        explanation-in: Bahasa Indonesia
+      timeout-minutes: 5
+
+    - name: AI Tutor Nederlands
+      uses: kangwonlee/gemini-python-tutor@develop
+      id: ai_tutor-nederlands
+      if: always()
+      with:
+        report-files: ${{ steps.json.outputs.syntax }},${{ steps.json.outputs.style }},${{ steps.json.outputs.results }}
+        student-files: exercise.py
+        readme-path: README.md
+        api-key: ${{ secrets.GOOGLE_API_KEY }}
+        explanation-in: Nederlands
+      timeout-minutes: 5
+
+    - name: AI Tutor Vietnamese
+      uses: kangwonlee/gemini-python-tutor@develop
+      id: ai_tutor-vietnamese
+      if: always()
+      with:
+        report-files: ${{ steps.json.outputs.syntax }},${{ steps.json.outputs.style }},${{ steps.json.outputs.results }}
+        student-files: exercise.py
+        readme-path: README.md
+        api-key: ${{ secrets.GOOGLE_API_KEY }}
+        explanation-in: Vietnamese
+      timeout-minutes: 5
+
     - name: upload artifacts
       id: artifacts
       uses: actions/upload-artifact@v4
