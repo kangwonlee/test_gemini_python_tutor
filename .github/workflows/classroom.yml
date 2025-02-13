@@ -206,6 +206,18 @@ jobs:
         explanation-in: Nederlands
       timeout-minutes: 5
 
+    - name: AI Tutor Norwegian
+      uses: kangwonlee/gemini-python-tutor@main
+      id: ai_tutor-norwegian
+      if: always()
+      with:
+        report-files: ${{ steps.json.outputs.syntax }},${{ steps.json.outputs.style }},${{ steps.json.outputs.results }}
+        student-files: exercise.py
+        readme-path: README.md
+        api-key: ${{ secrets.GOOGLE_API_KEY }}
+        explanation-in: Norwegian
+      timeout-minutes: 5
+
     - name: AI Tutor Spanish
       uses: kangwonlee/gemini-python-tutor@main
       id: ai_tutor-spanish
