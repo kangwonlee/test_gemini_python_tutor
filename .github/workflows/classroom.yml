@@ -21,36 +21,24 @@ jobs:
       with:
         submodules: 'true'
 
-    - name: Update pip
-      run: python -m pip install --upgrade pip
-
-    - name: Create and Activate Virtual Environment
-      run: |
-        python -m venv test-env
-        source test-env/bin/activate
-        echo $VIRTUAL_ENV
-
-    - name: Get pip cache dir
-      id: pip-cache
-      run: |
-        source test-env/bin/activate
-        echo $VIRTUAL_ENV
-        echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-
-    - name: pip cache
-      uses: actions/cache@v4
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
       with:
-        path: ${{ steps.pip-cache.outputs.dir }}
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        version: "latest"
+        enable-cache: true
+        cache-suffix: "uv"
+        cache-dependency-glob: "./requirements.txt"
+
+    - name: Create venv
+      id: pip-cache
+      run: uv venv test-env
 
     - name: Setup test environment
       id: setup-env
       run: |
         source test-env/bin/activate
         echo $VIRTUAL_ENV
-        pip install -r requirements.txt
+        uv pip install -r ./requirements.txt
 
     - name: Set report file names
       id: json
@@ -64,8 +52,8 @@ jobs:
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: check syntax
-        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.syntax }} tests/test_syntax.py"
+        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && uv pip list"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-indent=4 --json-report-file=${{ steps.json.outputs.syntax }} tests/test_syntax.py"
         timeout: 1
         max-score: 2
 
@@ -74,8 +62,8 @@ jobs:
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: check style
-        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-file=${{ steps.json.outputs.style }} tests/test_style.py"
+        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && uv pip list"
+        command: ". test-env/bin/activate && python -m pytest --json-report --json-report-indent=4 --json-report-file=${{ steps.json.outputs.style }} tests/test_style.py"
         timeout: 1
         max-score: 1
   
@@ -84,8 +72,8 @@ jobs:
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: test results
-        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && python -m pip list"
-        command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-file=${{ steps.json.outputs.results }} tests/test_results.py"
+        setup-command: ". test-env/bin/activate && echo $VIRTUAL_ENV && uv pip list"
+        command: ". test-env/bin/activate && python -m pytest -n auto --json-report --json-report-indent=4 --json-report-file=${{ steps.json.outputs.results }} tests/test_results.py"
         timeout: 2
         max-score: 2
 
