@@ -99,8 +99,8 @@ jobs:
   ai-tutor:
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1
       matrix:
-        max-parallel: 2
         language: [English, Korean, "Bahasa Indonesia", Chinese, French, German, Italian, Japanese, Nederlands, Norwegian, Spanish, Swedish, Thai, Vietnamese]
     needs: run-autograding-tests
     if: ${{ always() }}
