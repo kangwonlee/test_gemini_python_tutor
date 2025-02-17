@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        max-parallel: 1
+        max-parallel: 2
         language: [English, Korean, "Bahasa Indonesia", Chinese, French, German, Italian, Japanese, Nederlands, Norwegian, Spanish, Swedish, Thai, Vietnamese]
     needs: run-autograding-tests
     if: ${{ always() }}
