@@ -99,6 +99,7 @@ jobs:
   ai-tutor:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       max-parallel: 1
       matrix:
         language: [English, Korean, "Bahasa Indonesia", Chinese, French, German, Italian, Japanese, Nederlands, Norwegian, Spanish, Swedish, Thai, Vietnamese]
