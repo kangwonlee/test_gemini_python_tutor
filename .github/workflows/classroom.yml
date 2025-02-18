@@ -115,7 +115,7 @@ jobs:
           name: images_reports
 
       - name: AI Tutor
-        uses: kangwonlee/gemini-python-tutor@v0.1.6.1
+        uses: docker://beachgoer/gemini-python-tutor:v0.1.6.1
         id: ai_tutor
         with:
           report-files: report_syntax.json,report_style.json,report_results.json    # Use the downloaded report file
